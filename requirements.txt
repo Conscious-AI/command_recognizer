@@ -1,9 +1,10 @@
-PyAudio==0.2.11
-torchaudio==0.7.0.dev20200723
-tqdm==4.47.0
-torch==1.7.0.dev20200723+cu92
-noisereduce==1.1.0
-numpy==1.19.0
-pandas==1.0.5
 scipy==1.5.1
+pandas==1.0.5
+googledrivedownloader==0.4
+PyAudio==0.2.11
+torch==1.7.0.dev20200723+cu92
+numpy==1.19.0
+tqdm==4.47.0
+torchaudio==0.7.0.dev20200723
 SoundFile==0.10.3.post1
+noisereduce==1.1.0
