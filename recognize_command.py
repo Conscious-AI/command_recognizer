@@ -35,15 +35,6 @@ TIMEOUT_LENGTH = 2
 MODEL_PATH = './command_model.pth'
 CSV_PATH = './data/command_labels.csv'
 WAV_PATH = './temp.wav'
-HPARAMS = {
-    "n_cnn_layers": 3,
-    "n_rnn_layers": 5,
-    "rnn_dim": 512,
-    "n_class": 29,
-    "n_feats": 128,
-    "stride": 2,
-    "dropout": 0.1,
-}
 
 
 class Listener:
@@ -105,14 +96,7 @@ class Listener:
 
 
 # Initialising a new model to recognize
-model = SpeechRecognitionModel(
-    HPARAMS['n_cnn_layers'],
-    HPARAMS['n_rnn_layers'],
-    HPARAMS['rnn_dim'],
-    HPARAMS['n_class'],
-    HPARAMS['n_feats'],
-    HPARAMS['stride'],
-    HPARAMS['dropout'])
+model = SpeechRecognitionModel()
 
 # Loading a pre-trained model
 model.load_state_dict(torch.load(MODEL_PATH))
