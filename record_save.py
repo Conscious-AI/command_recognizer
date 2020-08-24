@@ -4,20 +4,23 @@ import struct
 import wave
 import time
 import os
+import sys
 from argparse import ArgumentParser
+from configparser import ConfigParser
 
 import pandas as pd
 
-# TODO: Dynamic threshold
-Threshold = 150
 
-FORMAT = pyaudio.paInt16
+config = ConfigParser()
+config.read('../audio_processing/audio_config.ini')
+
+FORMAT = getattr(pyaudio, config.get('config', 'FORMAT'))
+THRESHOLD = config.getint('config', 'THRESHOLD')
+CHUNK = config.getint('config', 'CHUNK_SIZE')
+CHANNELS = config.getint('config', 'CHANNELS')
+S_RATE = config.getint('config', 'SAMPLE_RATE')
+S_WIDTH = config.getint('config', 'SAMPLE_WIDTH')
 SHORT_NORMALIZE = (1.0/32768.0)
-CHUNK = 1024
-CHANNELS = 1
-RATE = 16000
-S_WIDTH = 2
-
 TIMEOUT_LENGTH = 2
 
 
@@ -53,7 +56,7 @@ class Recorder:
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format=FORMAT,
                                   channels=CHANNELS,
-                                  rate=RATE,
+                                  rate=S_RATE,
                                   input=True,
                                   output=True,
                                   frames_per_buffer=CHUNK)
@@ -71,7 +74,7 @@ class Recorder:
 
         while current <= end:
             data = self.stream.read(CHUNK)
-            if self.rms(data) >= Threshold:
+            if self.rms(data) >= THRESHOLD:
                 end = time.time() + TIMEOUT_LENGTH
 
             current = time.time()
@@ -83,7 +86,7 @@ class Recorder:
         wf = wave.open(self.filename, 'wb')
         wf.setnchannels(CHANNELS)
         wf.setsampwidth(self.p.get_sample_size(FORMAT))
-        wf.setframerate(RATE)
+        wf.setframerate(S_RATE)
         wf.writeframes(recording)
         wf.close()
         print('Written to file: {}'.format(self.filename))
@@ -91,28 +94,28 @@ class Recorder:
 
     def listen(self):
         for idx in range(len(self.command_dirs)):
-            print('\nListening for \"{}\" ...\n'.format(
+            print('Listening for \"{}\" ...\n'.format(
                 self.command_labels[idx]))
             for i in range(self.samples):
                 while True:
                     input = self.stream.read(CHUNK)
                     rms_val = self.rms(input)
-                    if rms_val > Threshold:
+                    if rms_val > THRESHOLD:
                         self.get_file_dir(self, idx, i)
                         self.record()
                         break
-        print('\nDone.')
+        print('Done.')
 
 
 parser = ArgumentParser(
-    description='Records and saves a stream of audio from default input device inside a root directory according to a csv file')
+    description='Records and saves a stream of audio as wavfile from default input device inside a root directory according to a csv file')
 
-parser.add_argument('-r', '--root', dest='root', type=str, required=True,
+parser.add_argument('-r', '--root', dest='root', type=str, required=False,
                     default='./data/', help='Root Directory to store the audio files')
 parser.add_argument('-c', '--csv', dest='csv', type=str, required=False,
                     default='./data/command_labels.csv', help='CSV file contaning the sentences')
 parser.add_argument('-s', '--samples', dest='samples', type=int, required=False,
-                    default=1, help='Number of audio samples to take per sentence')
+                    default=5, help='Number of audio samples to take per sentence')
 
 args = parser.parse_args()
 
