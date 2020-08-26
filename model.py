@@ -70,8 +70,8 @@ class _BidirectionalGRU(nn.Module):
 class SpeechRecognitionModel(nn.Module):
 
     def __init__(self,
-                 n_cnn_layers=3,
-                 n_rnn_layers=5,
+                 n_cnn_layers=1,
+                 n_rnn_layers=3,
                  rnn_dim=512,
                  n_class=29,
                  n_feats=128,
