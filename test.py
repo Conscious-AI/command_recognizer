@@ -16,15 +16,13 @@ from data_processing import (
     postprocess_model
 )
 
-EPOCHS = 100
-LEARNING_RATE = 5e-4
-BATCH_SIZE = 50
+BATCH_SIZE = 10
 ROOT_DIR = './data/'
 CSV_FILE = f'{ROOT_DIR}command_labels.csv'
-MODEL_PATH = './command_model.pth'
+MODEL_PATH = './command_model_trained.pth'
 
 
-def test(model, device, test_loader, criterion, epoch):
+def test(model, device, test_loader, criterion):
     model.eval()
     test_loss = 0
     test_cer, test_wer = [], []
@@ -60,13 +58,10 @@ device = torch.device("cuda" if use_cuda else "cpu")
 
 test_dataset = CommandDataset(csv_file=CSV_FILE, root_dir=ROOT_DIR)
 
-kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-
 test_loader = DataLoader(dataset=test_dataset,
                          batch_size=BATCH_SIZE,
                          shuffle=False,
-                         collate_fn=lambda x: preprocess_model(x, 'test'),
-                         **kwargs)
+                         collate_fn=lambda x: preprocess_model(x, 'test'))
 
 model = SpeechRecognitionModel().to(device)
 
@@ -77,6 +72,5 @@ model.load_state_dict(torch.load(MODEL_PATH))
 
 criterion = nn.CTCLoss(blank=28).to(device)
 
-for epoch in tqdm(range(1, EPOCHS + 1)):
-    print("\nEvaluating...")
-    test(model, device, test_loader, criterion, epoch)
+print("\nEvaluating...")
+test(model, device, test_loader, criterion)
