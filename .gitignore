@@ -1,6 +1,15 @@
+# Some misc. exclusions
 .ipynb_checkpoints
 __pycache__
+
+# Excluding user-specific recorded audio
+data/*
+!data/command_labels.csv
+
+# Excluding models
 command_model.pth
 command_model_chkpnt.pth
 command_model_trained.pth
+
+# Excluding temporary generated file
 temp.wav
