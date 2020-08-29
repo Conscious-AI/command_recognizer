@@ -6,20 +6,14 @@ import time
 import os
 import sys
 from argparse import ArgumentParser
-from configparser import ConfigParser
 
 import pandas as pd
 
+sys.path.append('..')
+# Audio configs vars
+from audio_processing.audio_confs import *
 
-config = ConfigParser()
-config.read('../audio_processing/audio_config.ini')
 
-FORMAT = getattr(pyaudio, config.get('config', 'FORMAT'))
-THRESHOLD = config.getint('config', 'THRESHOLD')
-CHUNK = config.getint('config', 'CHUNK_SIZE')
-CHANNELS = config.getint('config', 'CHANNELS')
-S_RATE = config.getint('config', 'SAMPLE_RATE')
-S_WIDTH = config.getint('config', 'SAMPLE_WIDTH')
 SHORT_NORMALIZE = (1.0/32768.0)
 TIMEOUT_LENGTH = 2
 
