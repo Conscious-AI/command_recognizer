@@ -34,7 +34,7 @@ logger = Logger()
 try:
     logger.connect()
     logger_connected = True
-except:
+except Exception:
     print('An exception occured while trying to connect to logger')
     logger_connected = False
 
@@ -42,7 +42,7 @@ except:
 def _print_log(data):
     print(data)
     if logger_connected:
-        logger.log(data)
+        logger.log(f'RECO: {data}')
 
 
 class Listener:
@@ -163,3 +163,9 @@ class CommandRecognizer():
 
         _print_log("\n--- Total Recognition Time: {:0.4f} seconds ---\n".format(time.time() - start_t))
         return result, accuracy
+
+
+if __name__ == "__main__":
+    recognizer = CommandRecognizer()
+    while True:
+        recognizer.recognize()
