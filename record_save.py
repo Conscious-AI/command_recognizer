@@ -18,6 +18,11 @@ SHORT_NORMALIZE = (1.0/32768.0)
 TIMEOUT_LENGTH = 2
 
 
+def printout(_str):
+    print(_str)
+    sys.stdout.flush()
+
+
 class Recorder:
 
     @staticmethod
@@ -61,7 +66,7 @@ class Recorder:
         self.command_labels = self.command_csv.iloc[:, 1]
 
     def record(self):
-        print('Audio detected, recording now ...')
+        printout('Audio detected, recording now ...')
         rec = []
         current = time.time()
         end = time.time() + TIMEOUT_LENGTH
@@ -76,19 +81,19 @@ class Recorder:
         self.write(b''.join(rec))
 
     def write(self, recording):
-        print('Saving audio sample ...')
+        printout('Saving audio sample ...')
         wf = wave.open(self.filename, 'wb')
         wf.setnchannels(CHANNELS)
         wf.setsampwidth(self.p.get_sample_size(FORMAT))
         wf.setframerate(S_RATE)
         wf.writeframes(recording)
         wf.close()
-        print('Written to file: {}'.format(self.filename))
-        print('Listening again ...')
+        printout('Written to file: {}'.format(self.filename))
+        printout('Listening again ...')
 
     def listen(self):
         for idx in range(len(self.command_dirs)):
-            print('Listening for \"{}\" ...\n'.format(
+            printout('Listening for \"{}\" ...\n'.format(
                 self.command_labels[idx]))
             for i in range(self.samples):
                 while True:
@@ -98,7 +103,7 @@ class Recorder:
                         self.get_file_dir(self, idx, i)
                         self.record()
                         break
-        print('Done.')
+        printout('Done.')
 
 
 parser = ArgumentParser(

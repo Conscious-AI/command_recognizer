@@ -5,6 +5,11 @@ import struct
 import wave
 import sys
 
+# TODO: Refactor this spaghetti
+PATH = os.path.dirname(os.path.realpath(__file__))
+sys.path.append('..')
+sys.path.append(PATH)
+
 import pyaudio
 import pandas as pd
 
@@ -15,8 +20,6 @@ import torchaudio
 from model import SpeechRecognitionModel
 import data_processing as dp
 
-sys.path.append('..')
-
 # Logger Import
 from local_server.logger import Logger
 # Audio configs vars
@@ -25,9 +28,9 @@ from audio_processing.audio_confs import *
 
 SHORT_NORMALIZE = (1.0/32768.0)
 TIMEOUT_LENGTH = 2
-MODEL_PATH = './command_model_trained.pth'
-CSV_PATH = './data/command_labels.csv'
-WAV_PATH = './temp.wav'
+MODEL_PATH = f'{PATH}\\command_model_trained.pth'
+CSV_PATH = f'{PATH}\\data\\command_labels.csv'
+WAV_PATH = f'{PATH}\\temp.wav'
 
 # Logger Init
 logger = Logger()
@@ -35,12 +38,12 @@ try:
     logger.connect()
     logger_connected = True
 except Exception:
-    print('An exception occured while trying to connect to logger')
+    # print('An exception occured while trying to connect to logger')
     logger_connected = False
 
 
 def _print_log(data):
-    print(data)
+    # print(data)
     if logger_connected:
         logger.log(f'RECO: {data}')
 
