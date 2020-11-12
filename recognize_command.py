@@ -43,7 +43,8 @@ except Exception:
 
 
 def _print_log(data):
-    # print(data)
+    print(data)
+    sys.stdout.flush()
     if logger_connected:
         logger.log(f'RECO: {data}')
 
