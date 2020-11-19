@@ -16,7 +16,7 @@ from data_processing import (
     postprocess_model
 )
 
-BATCH_SIZE = 10
+BATCH_SIZE = 2
 ROOT_DIR = './data/'
 CSV_FILE = f'{ROOT_DIR}command_labels.csv'
 MODEL_PATH = './command_model_trained.pth'

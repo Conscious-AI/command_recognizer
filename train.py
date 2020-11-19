@@ -16,7 +16,7 @@ from data_processing import preprocess_model
 
 EPOCHS = 25
 MAX_LEARNING_RATE = 5e-4
-BATCH_SIZE = 10
+BATCH_SIZE = 2
 ROOT_DIR = './data/'
 CSV_FILE = f'{ROOT_DIR}command_labels.csv'
 MODEL_PATH = './command_model.pth'
